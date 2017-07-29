@@ -1,0 +1,93 @@
+import lxml.html as LH                                       # Importing libraries and modules, defining functions
+import requests
+import re
+from string import maketrans
+def text(elt):
+    return elt.text_content().replace(u'\xa0', u' ')
+url = 'http://www.wahlrecht.de/umfragen/insa.htm'            # Importing data from INSA/YouGov
+r = requests.get(url)
+root = LH.fromstring(r.content)
+for table in root.xpath('//table[@class = "wilko"]'):
+    data = [text(td) for td in table.xpath('tbody')]
+dstring = str(data)
+dstring = dstring.translate(maketrans(',.', '.,'))
+dlist = re.findall(r'([+-]?\d+(?:\.\d+)?(?:[eE][+-]\d+)?)', dstring)
+polls=['','','','','','','']
+polls[0:4] = dlist[3:8] 
+polls[5:8] = dlist[10:12]
+for i in range(len(polls)): 
+    polls[i] = float(polls[i]) 
+P=0
+for i in range(len(polls)-1):
+    P += polls[i]
+                                                         # Computing seats, Shapley values and all winning coalitions
+parties=('A','B','C', 'D', 'E', 'F')                      # Initialize parties and coalitions (labelled by letters)
+labels = ('CDU/CSU', 'SPD','Grüne','FDP','Linke','AfD')
+label = dict(zip(parties,labels))   
+coalitions = powerset(parties)
+s ={}                                                     # Initialize proportions of seats (precise and rounded)    
+sround = {}    
+pl = {} 
+i = 0  
+for p in parties:
+    pl[p]=polls[i]
+    s[p] = polls[i]/P
+    sround[p]= round(float(s[p]*100),1)
+    i+=1
+                                                         # Introduce campaign commitments
+friends={}
+friends['A']='A', 'B', 'C', 'D', 'E', 'F'
+friends['B']='A', 'B', 'C', 'D', 'E', 'F'
+friends['C']='A', 'B', 'C', 'D', 'E', 'F'
+friends['D']='A', 'B', 'C', 'D', 'E', 'F'
+friends['E']='A', 'B', 'C', 'D', 'E', 'F'
+friends['F']='A', 'B', 'C', 'D', 'E', 'F'
+worth = {}                                           # Assign worth to coalitions
+for i in tuple(coalitions):
+    sumsp=0
+    for r in tuple(i):
+        j=set(i).intersection(set(friends[r]))
+        if j==set(i):
+            sumsp = sumsp +  s[r]
+    worth[tuple(i)] = ( sign(sumsp - 0.5) + 1)/2
+letter_game = CooperativeGame(worth)
+sh = letter_game.shapley_value()
+show( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
+for k in parties:
+    lb = label[k]
+    num = sround[k]
+    v = sh[k]
+    show( "{:<10} {:<10} {:<10} {:<10} {:<10}".format(k, lb, pl[k], num, v) )    
+letter_function= worth
+for k in letter_function.keys():            # Find all winning coalitions
+    if letter_function[k] == 0:
+        del letter_function[k]
+        # Find all minimal winning coalitions
+for k in letter_function.keys():
+    for j in letter_function.keys():
+        if (j<> k) and (set(k).intersection(set(j)) == set(k)):
+            del letter_function[j]
+         # Find all stable coalitions
+chi = letter_function
+for k in letter_function.keys():
+    S = 0
+    for j in k:
+        S += sh[j]
+    chi[k] = letter_function[k]/S
+show('Minimal winning coalitions and Stability coefficients') 
+show('( Stability = 1 / Sum(Strength) ):')
+show(chi)
+S = 0    
+for k in letter_function.keys():
+    if chi[k] > S:
+        S = chi[k]
+for k in chi.keys():
+        if chi[k] != S:
+            del letter_function[k]
+show('Stable coalitions and Power distribution') 
+show('( Power = Strength x Stability ):')            
+for k in chi.keys():
+    power={}
+    for i in tuple(k):
+        power[i] = chi[k]*sh[i]
+    show(k, power)
