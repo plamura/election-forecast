@@ -60,7 +60,7 @@ friends['H']='A', 'B', 'C', 'E', 'G', 'H'
 friends['I']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
 friends['J']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
 
-print s
+
 
 worth = {}                                           # Assign worth to coalitions
 for i in tuple(coalitions):
