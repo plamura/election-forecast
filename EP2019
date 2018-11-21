@@ -1,4 +1,4 @@
-import lxml.html as LH                                       # Importing libraries and modules, defining functions
+                                    # Importing libraries and modules, defining functions
 import matplotlib.pyplot as plt
 polls={}
 polls[0]=float(172/7.51)
