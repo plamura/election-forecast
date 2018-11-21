@@ -1,6 +1,7 @@
 import lxml.html as LH                                       # Importing libraries and modules, defining functions
 import requests
 import re
+import matplotlib.pyplot as plt
 from string import maketrans
 def text(elt):
     return elt.text_content().replace(u'\xa0', u' ')
@@ -52,12 +53,12 @@ friends={}
 friends['A']='A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['B']='A', 'B', 'C', 'E', 'F', 'G', 'H'
 friends['C']='A', 'B', 'C', 'E', 'F', 'G', 'H'
-friends['D']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
-friends['E']='B', 'C', 'E', 'G', 'H'
-friends['F']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+friends['D']='A', 'B', 'C', 'D', 'F', 'G', 'H'
+friends['E']='B', 'C', 'E', 'F', 'G', 'H'
+friends['F']='A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['G']='A', 'B', 'C', 'D', 'F', 'G', 'H'
-friends['H']='A', 'B', 'C', 'E', 'G', 'H'
-friends['I']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+friends['H']='A', 'B', 'C', 'E', 'F', 'G', 'H'
+friends['I']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
 friends['J']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
 
 
@@ -108,8 +109,13 @@ for k in chi.keys():
             del letter_function[k]
 show('Stable coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
+t=0
 for k in chi.keys():
+    t=t+1
     power={}
+    plt.figure(t)
     for i in tuple(k):
         power[i] = chi[k]*sh[i]
+        plt.bar(i, power[i])
+    plt.show()
     show(k, power)
