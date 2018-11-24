@@ -70,16 +70,24 @@ for k in letter_function.keys():
     for j in letter_function.keys():
         if (j<> k) and (set(k).intersection(set(j)) == set(k)):
             del letter_function[j]
-         # Find all stable coalitions
+
+            # Find all stable coalitions
+
 chi = letter_function
+t=0
+plt.figure(t)
 for k in letter_function.keys():
     S = 0
     for j in k:
         S += sh[j]
     chi[k] = letter_function[k]/S
+    plt.bar(str(k),chi[k])
+
 show('Minimal winning coalitions and Stability coefficients') 
 show('( Stability = 1 / Sum(Strength) ):')
 show(chi)
+plt.show()
+
 S = 0    
 for k in letter_function.keys():
     if chi[k] > S:
@@ -89,7 +97,7 @@ for k in chi.keys():
             del letter_function[k]
 show('Stable coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
-t=0
+
 for k in chi.keys():
     t=t+1
     power={}
