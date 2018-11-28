@@ -1,15 +1,15 @@
 import matplotlib.pyplot as plt
 polls={}
-polls[0]=float(100/349)
-polls[1]=float(70/349)
-polls[2]=float(62/349)
-polls[3]=float(31/349)
-polls[4]=float(28/349)
-polls[5]=float(22/349)
-polls[6]=float(20/349)
-polls[7]=float(16/349)
-polls[8]=float(0/349)
-polls[9]=float(0/349)
+polls[0]=float(100/349*100)
+polls[1]=float(70/349*100)
+polls[2]=float(62/349*100)
+polls[3]=float(31/349*100)
+polls[4]=float(28/349*100)
+polls[5]=float(22/349*100)
+polls[6]=float(20/349*100)
+polls[7]=float(16/349*100)
+polls[8]=float(0/349*100)
+polls[9]=float(0/349*100)
 
 P=0
 for i in range(len(polls)-1):
@@ -17,7 +17,7 @@ for i in range(len(polls)-1):
 
         # Computing seats, Shapley values and all winning coalitions
 parties=('A','B','C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')                      # Initialize parties and coalitions (labelled by letters)
-labels = ('S1', 'M1','SD','C1','V1','KD','L1','MP','NI', 'Ind')
+labels = ('S/S&D', 'M/EPP','SD/ECR','C/ALDE','V/LEFT','KD/EPP','L/ALDE','MP/G/EFA','NI', 'Ind')
 label = dict(zip(parties,labels))   
 coalitions = powerset(parties)
 s ={}                                                     # Initialize proportions of seats (precise and rounded)    
@@ -30,19 +30,19 @@ for p in parties:
     sround[p]= round(float(s[p]*100),1)
     i+=1
 
-                                      # Introduce campaign commitments
+
+                             # Introduce campaign commitments
 friends={}
-friends['A']='A', 'D', 'E', 'G', 'H'
-friends['B']='B', 'C', 'D', 'F', 'G'
-friends['C']='B', 'C', 'D', 'F', 'G'
-friends['D']='A', 'B', 'D', 'E', 'F', 'G', 'H'
+friends['A']='A', 'B', 'D', 'E', 'G'
+friends['B']='A', 'B', 'C', 'D', 'F', 'G'
+friends['C']='A', 'B', 'C', 'D', 'F', 'G'
+friends['D']='A', 'B', 'D', 'F', 'G', 'H'
 friends['E']='A', 'D', 'E', 'G', 'H'
 friends['F']='B', 'C', 'D', 'F', 'G'
-friends['G']='A', 'B', 'D', 'F', 'G'
+friends['G']='A', 'B', 'D', 'F', 'G', 'H'
 friends['H']='A', 'E', 'H'
 friends['I']='A', 'E', 'G', 'H', 'I'
 friends['J']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
-
 
 
 worth = {}                                           # Assign worth to coalitions
@@ -53,8 +53,6 @@ for i in tuple(coalitions):
         if j==set(i):
             sumsp = sumsp +  s[r]
     worth[tuple(i)] = ( sign(sumsp - 0.5) + 1)/2
-
-
 letter_game = CooperativeGame(worth)
 sh = letter_game.shapley_value()
 show( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
@@ -72,16 +70,24 @@ for k in letter_function.keys():
     for j in letter_function.keys():
         if (j<> k) and (set(k).intersection(set(j)) == set(k)):
             del letter_function[j]
-         # Find all stable coalitions
+
+            # Find all stable coalitions
+
 chi = letter_function
+t=0
+plt.figure(t)
 for k in letter_function.keys():
     S = 0
     for j in k:
         S += sh[j]
     chi[k] = letter_function[k]/S
+    plt.bar(str(k),chi[k])
+
 show('Minimal winning coalitions and Stability coefficients') 
 show('( Stability = 1 / Sum(Strength) ):')
 show(chi)
+plt.show()
+
 S = 0    
 for k in letter_function.keys():
     if chi[k] > S:
@@ -91,13 +97,13 @@ for k in chi.keys():
             del letter_function[k]
 show('Stable coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
-t=0
+
 for k in chi.keys():
     t=t+1
     power={}
     plt.figure(t)
     for i in tuple(k):
         power[i] = chi[k]*sh[i]
-        plt.bar(i, power[i])
+        plt.bar(label[i], power[i]*10*4/3)
     plt.show()
     show(k, power)
