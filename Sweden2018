@@ -33,14 +33,14 @@ for p in parties:
 
                              # Introduce campaign commitments
 friends={}
-friends['A']='A', 'B', 'D', 'E', 'G'
-friends['B']='A', 'B', 'C', 'D', 'F', 'G'
-friends['C']='A', 'B', 'C', 'D', 'F', 'G'
+friends['A']='A', 'B', 'D', 'E', 'F', 'G', 'H'
+friends['B']='A', 'B', 'C', 'D', 'F', 'G', 'H'
+friends['C']='A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['D']='A', 'B', 'D', 'F', 'G', 'H'
-friends['E']='A', 'D', 'E', 'G', 'H'
-friends['F']='B', 'C', 'D', 'F', 'G'
+friends['E']='A', 'E', 'H'
+friends['F']= 'A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['G']='A', 'B', 'D', 'F', 'G', 'H'
-friends['H']='A', 'E', 'H'
+friends['H']='A', 'B', 'D', 'E', 'F', 'G', 'H'
 friends['I']='A', 'E', 'G', 'H', 'I'
 friends['J']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
 
