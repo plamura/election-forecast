@@ -16,8 +16,8 @@ for i in range(len(polls)-1):
     P += polls[i]
 
         # Computing seats, Shapley values and all winning coalitions
-parties=('A','B','C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')                      # Initialize parties and coalitions (labelled by letters)
-labels = ('S/S&D', 'M/EPP','SD/ECR','C/ALDE','V/LEFT','KD/EPP','L/ALDE','MP/G/EFA','NI', 'Ind')
+parties=('A','B','C', 'D', 'E', 'F', 'G', 'H')                      # Initialize parties and coalitions (labelled by letters)
+labels = ('S/S&D', 'M/EPP','SD/ECR','C/ALDE','V/LEFT','KD/EPP','L/ALDE','MP/G/EFA')
 label = dict(zip(parties,labels))   
 coalitions = powerset(parties)
 s ={}                                                     # Initialize proportions of seats (precise and rounded)    
@@ -41,8 +41,6 @@ friends['E']='A', 'E', 'H'
 friends['F']= 'A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['G']='A', 'B', 'D', 'F', 'G', 'H'
 friends['H']='A', 'B', 'D', 'E', 'F', 'G', 'H'
-friends['I']='A', 'E', 'G', 'H', 'I'
-friends['J']='A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
 
 
 worth = {}                                           # Assign worth to coalitions
@@ -78,11 +76,16 @@ t=0
 plt.figure(t)
 for k in letter_function.keys():
     S = 0
+    u=' '
     for j in k:
         S += sh[j]
+        u=u+label[j].split('/')[0] + ' '
     chi[k] = letter_function[k]/S
-    plt.bar(str(k),chi[k])
+    plt.bar(u,chi[k])
 
+
+
+    
 show('Minimal winning coalitions and Stability coefficients') 
 show('( Stability = 1 / Sum(Strength) ):')
 show(chi)
