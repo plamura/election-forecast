@@ -76,29 +76,20 @@ t=0
 plt.figure(t)
 for k in letter_function.keys():
     S = 0
-    u=' '
     for j in k:
         S += sh[j]
-        u=u+label[j].split('/')[0] + ' '
     chi[k] = letter_function[k]/S
-    plt.bar(u,chi[k])
-
-
-
-    
+    power = {}
+    b = 0
+    for i in k:
+        power[i] = chi[k]*sh[i]*10*4/3
+        plt.bar(str(k), power[i], bottom = b)
+        b = b +power[i]
 show('Minimal winning coalitions and Stability coefficients') 
 show('( Stability = 1 / Sum(Strength) ):')
-show(chi)
 plt.show()
-
-S = 0    
-for k in letter_function.keys():
-    if chi[k] > S:
-        S = chi[k]
-for k in chi.keys():
-        if chi[k] != S:
-            del letter_function[k]
-show('Stable coalitions and Power distribution') 
+    
+show('Minimal winning coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
 
 for k in chi.keys():
@@ -110,3 +101,21 @@ for k in chi.keys():
         plt.bar(label[i], power[i]*10*4/3)
     plt.show()
     show(k, power)
+
+t= t+1
+plt.figure(t)
+for k in letter_function.keys():
+    S = 0
+    u=' '
+    b = 0
+    for j in k:
+        S += sh[j]
+        u=u+label[j].split('/')[0] + ' '
+    chi[k] = letter_function[k]/S
+    power = {}
+    b = 0
+    for i in k:
+        power[i] = chi[k]*sh[i]*10*4/3
+        plt.bar(u, power[i], bottom = b)
+        b = b +power[i]
+plt.show()
