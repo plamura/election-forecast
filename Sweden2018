@@ -18,7 +18,11 @@ for i in range(len(polls)-1):
         # Computing seats, Shapley values and all winning coalitions
 parties=('A','B','C', 'D', 'E', 'F', 'G', 'H')                      # Initialize parties and coalitions (labelled by letters)
 labels = ('S/S&D', 'M/EPP','SD/ECR','C/ALDE','V/LEFT','KD/EPP','L/ALDE','MP/G/EFA')
-label = dict(zip(parties,labels))   
+
+colors = ('red','deepskyblue', 'gold', 'green', 'brown','darkblue', 'blue', 'yellowgreen')
+
+label = dict(zip(parties,labels))  
+color = dict(zip(parties,colors))
 coalitions = powerset(parties)
 s ={}                                                     # Initialize proportions of seats (precise and rounded)    
 sround = {}    
@@ -71,51 +75,31 @@ for k in letter_function.keys():
 
             # Find all stable coalitions
 
-chi = letter_function
 t=0
-plt.figure(t)
+plt.figure(t)                
+chi = {}
+power = {}
+
 for k in letter_function.keys():
     S = 0
     for j in k:
         S += sh[j]
     chi[k] = letter_function[k]/S
-    power = {}
-    b = 0
-    for i in k:
-        power[i] = chi[k]*sh[i]*10*4/3
-        plt.bar(str(k), power[i], bottom = b)
-        b = b +power[i]
-show('Minimal winning coalitions and Stability coefficients') 
-show('( Stability = 1 / Sum(Strength) ):')
-plt.show()
-    
-show('Minimal winning coalitions and Power distribution') 
-show('( Power = Strength x Stability ):')            
-
-for k in chi.keys():
-    t=t+1
-    power={}
-    plt.figure(t)
-    for i in tuple(k):
-        power[i] = chi[k]*sh[i]
-        plt.bar(label[i], power[i]*10*4/3)
-    plt.show()
-    show(k, power)
-
-t= t+1
-plt.figure(t)
-for k in letter_function.keys():
-    S = 0
     u=' '
     b = 0
     for j in k:
-        S += sh[j]
         u=u+label[j].split('/')[0] + ' '
-    chi[k] = letter_function[k]/S
-    power = {}
-    b = 0
     for i in k:
         power[i] = chi[k]*sh[i]*10*4/3
-        plt.bar(u, power[i], bottom = b)
+        plt.bar(u, power[i], bottom = b, color = color[i])
         b = b +power[i]
+
+show('Minimal winning coalitions and Power distribution') 
+show('( Power = Strength x Stability ):')            
+
 plt.show()
+        
+show('Minimal winning coalitions and Stability coefficients') 
+show('( Stability = 1 / Sum(Strength) ):')
+
+show(chi)
