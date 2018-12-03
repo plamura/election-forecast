@@ -1,0 +1,98 @@
+import matplotlib.pyplot as plt
+polls={}
+polls[0]=float(33/109)
+polls[1]=float(26/109)
+polls[2]=float(21/109)
+polls[3]=float(17/109)
+polls[4]=float(12/109)
+
+P=0
+for i in range(len(polls)):
+    P += polls[i]
+
+        # Computing seats, Shapley values and all winning coalitions
+parties=['A','B','C', 'D', 'E']                      # Initialize parties and coalitions (labelled by letters)
+labels = ['PSOE/S&D', 'PP/EPP','Cs/ALDE','AA/LEFT','VOX/NI']
+
+colors = ['red','deepskyblue', 'green', 'orange', 'yellow']
+
+label = dict(zip(parties,labels))  
+color = dict(zip(parties,colors))
+coalitions = powerset(parties)
+
+
+s ={}                                                     # Initialize proportions of seats (precise and rounded)    
+sround = {}    
+pl = {} 
+i = 0  
+for p in parties:
+    pl[p]=polls[i]
+    s[p] = polls[i]/P
+    sround[p]= round(float(s[p]*100),1)
+    i+=1
+
+
+                             # Introduce campaign commitments
+friends={}
+friends['A']='A', 'B', 'C', 'D'
+friends['B']='A', 'B', 'C', 'E'
+friends['C']='B', 'C', 'E'
+friends['D']='A', 'B', 'D'
+friends['E']='B', 'C', 'E'
+
+worth = {}                                           # Assign worth to coalitions
+for i in tuple(coalitions):
+    sumsp=0
+    for r in tuple(i):
+        j=set(i).intersection(set(friends[r]))
+        if j==set(i):
+            sumsp = sumsp +  s[r]
+    worth[tuple(i)] = ( sign(sumsp - 0.5) + 1)/2
+letter_game = CooperativeGame(worth)
+sh = letter_game.shapley_value()
+show( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
+for k in parties:
+    lb = label[k]
+    num = sround[k]
+    v = max(sh[k],0)
+    show( "{:<10} {:<10} {:<10} {:<10} {:<10}".format(k, lb, pl[k], num, v) )    
+letter_function= worth
+for k in letter_function.keys():            # Find all winning coalitions
+    if letter_function[k] == 0:
+        del letter_function[k]
+        # Find all minimal winning coalitions
+for k in letter_function.keys():
+    for j in letter_function.keys():
+        if (j<> k) and (set(k).intersection(set(j)) == set(k)):
+            del letter_function[j]
+
+            # Find all stable coalitions
+
+t=0
+plt.figure(t)                
+chi = {}
+power = {}
+for k in letter_function.keys():
+    S = 0
+    for j in k:
+        sh[j] = max(sh[j],0)
+        S += sh[j]
+    chi[k] = letter_function[k]/S
+    u=' '
+    b = 0
+    for j in k:
+        u=u+label[j].split('/')[0] + ' '
+    for i in k:
+        power[i] = sh[i]*chi[k]
+        plt.bar(u, power[i], bottom = b, color = color[i])
+        b = b +power[i]
+
+show('Minimal winning coalitions and Power distribution') 
+show('( Power = Strength x Stability ):')            
+
+plt.show()
+        
+show('Minimal winning coalitions and Stability coefficients') 
+show('( Stability = 1 / Sum(Strength) ):')
+
+show(chi)
