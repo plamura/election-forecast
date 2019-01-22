@@ -90,7 +90,7 @@ for k in letter_function.keys():
     for j in k:
         u=u+label[j].split('/')[0] + ' '
     for i in k:
-        power[i] = sh[i]*chi[k]
+        power[i] = sh[i]*chi[k]*40/3
         plt.bar(u, power[i], bottom = b, color = color[i])
         b = b +power[i]
 
