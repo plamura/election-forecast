@@ -40,10 +40,10 @@ friends={}
 friends['A']='A', 'B', 'D', 'E', 'F', 'G', 'H'
 friends['B']='A', 'B', 'C', 'D', 'F', 'G', 'H'
 friends['C']='A', 'B', 'C', 'D', 'F', 'G', 'H'
-friends['D']='A', 'B', 'D', 'F', 'G', 'H'
-friends['E']='A', 'E', 'H'
+friends['D']='A', 'B', 'D', 'E', 'F', 'G', 'H'
+friends['E']='A', 'D', 'E', 'G', 'H'
 friends['F']= 'A', 'B', 'C', 'D', 'F', 'G', 'H'
-friends['G']='A', 'B', 'D', 'F', 'G', 'H'
+friends['G']='A', 'B', 'D', 'E', 'F', 'G', 'H'
 friends['H']='A', 'B', 'D', 'E', 'F', 'G', 'H'
 
 
@@ -79,10 +79,10 @@ t=0
 plt.figure(t)                
 chi = {}
 power = {}
-
 for k in letter_function.keys():
     S = 0
     for j in k:
+        sh[j] = max(sh[j],0)
         S += sh[j]
     chi[k] = letter_function[k]/S
     u=' '
@@ -90,7 +90,7 @@ for k in letter_function.keys():
     for j in k:
         u=u+label[j].split('/')[0] + ' '
     for i in k:
-        power[i] = chi[k]*sh[i]*10*4/3
+        power[i] = sh[i]*chi[k]
         plt.bar(u, power[i], bottom = b, color = color[i])
         b = b +power[i]
 
