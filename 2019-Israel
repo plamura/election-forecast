@@ -115,7 +115,7 @@ for k in letter_function.keys():
 show('Minimal winning coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
 
-plt.xticks(rotation=-20, fontsize=8)
+plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
 plt.show()
 
 show('Minimal winning coalitions and Stability coefficients') 
