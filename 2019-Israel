@@ -99,8 +99,6 @@ for k in letter_function.keys():
         S += sh[j]
     chi[k] = letter_function[k]/S
     u=''
-    po=''
-    pc=''
     b = 0
     for j in k:
         po=''
