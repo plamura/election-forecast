@@ -109,11 +109,11 @@ for k in letter_function.keys():
         if power[j]==0:
             po='('
             pc=')'
-        u = u + po + label[j].split('/')[0] + pc + ' '
+        u = u + po + label[j].split('/')[0] + pc + ' '  
     for i in k:
         plt.bar(u, power[i], bottom = b, color = color[i])
         b = b +power[i]
-
+    plt.bar(u, 0.03, bottom=chi[k]/600, color='white', width=.2) 
 show('Minimal winning coalitions and Power distribution') 
 show('( Power = Strength x Stability ):')            
 
@@ -139,4 +139,3 @@ for k in chi.keys():
     for i in tuple(k):
         power[i] = chi[k]*sh[i]
     show(k, power)
-
