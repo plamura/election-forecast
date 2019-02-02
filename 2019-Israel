@@ -21,7 +21,7 @@ for i in range(len(polls)):
 
         # Computing seats, Shapley values and all winning coalitions
 parties=['A','B','C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']                      # Initialize parties and coalitions (labelled by letters)
-labels = ['Li', 'La','JL','YA + Ha','Ku', 'JH', 'Sh', 'UTJ', 'YB', 'Me', 'NR', 'Ta', 'Ge', 'HY']
+labels = ['Li', 'La','JL','YA/Ha','Ku', 'JH', 'Sh', 'UTJ', 'YB', 'Me', 'NR', 'Ta', 'Ge', 'HY']
 
 colors = ['royalblue','red', 'black', 'dodgerblue', 'deepskyblue', 'chartreuse', 'gray', 'steelblue', 'cadetblue', 'mediumseagreen', 'lightskyblue', 'yellow', 'royalblue', 'olive']
 
