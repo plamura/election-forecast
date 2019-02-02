@@ -120,3 +120,10 @@ show('( Power = Strength x Stability ):')
 
 plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
 plt.show()
+
+plt.figure(1)                
+for i in parties:
+    plt.bar(label[i], pl[i], color = color[i], width=0.3, align='center')
+    plt.bar(label[i], 0.003, bottom = max(0,sh[i]/S), color = 'red', width=0.6, align='center')         
+plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
+plt.show()
