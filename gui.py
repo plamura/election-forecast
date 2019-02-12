@@ -1,6 +1,7 @@
 from Tkinter import *
 import csv
 
+
 CSV_FILE = "users.csv"
 
 def show_entry_fields():
@@ -10,10 +11,8 @@ def read_from_file():
     '''Read csv file and return a list like: [[username, password, count]]'''
     try:
         with open(CSV_FILE, 'rb') as f:
-            users = []
             reader = csv.reader(f)
             for row in reader:
-                row[2] = int(row[2]) # Make the count an integer so it can increase later
                 users.append(row)
             return users
     except IOError:
@@ -25,8 +24,6 @@ def write_to_file(users):
     '''Get a list of all users and write it to the csv file'''
     with open(CSV_FILE, 'wb') as f:
         writer = csv.writer(f)
-        for row in users:
-            row[2] = str(row[2])
         writer.writerows(users)
 
 
@@ -183,7 +180,9 @@ e55.grid(row=13, column=3)
 e56.grid(row=13, column=4)
 e57.grid(row=13, column=5)
 
+users=(str(e1),"2","3")
+
 Button(master, text='Quit', command=master.quit).grid(row=30, column=0, sticky=W, pady=4)
-Button(master, text='Show', command=show_entry_fields).grid(row=30, column=1, sticky=W, pady=4)
+Button(master, text='Show', command=write_to_file(users)).grid(row=30, column=1, sticky=W, pady=4)
 
 mainloop( )
