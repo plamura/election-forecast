@@ -1,168 +1,85 @@
 #!/usr/bin/env python3
-import math
-from math import *
-import matplotlib.pyplot as plt
-from cooperative_game import * 
+import tkinter as tk
+from tkinter import ttk
 import pickle
-import string
 
-# Initialize proportions of seats (precise and rounded)
-
-def powerset(s):
-     x = len(s)
-     masks = [1 << i for i in range(x)]
-     for i in range(1 << x):
-         yield [ss for mask, ss in zip(masks, s) if i & mask]
-
-
+FILENAME="save.pickle"
 entries={}
-entries = pickle.load( open( "save.p", "rb" ) )
+entry={}
+entry_var={}
 
-party_names={}
-polls={}
-s=0
-party_num=0
-for k in range(0, 15):
-     try:
-         polls[k]=float(entries[k,3])
-         s=s+1
-     except ValueError:
-         party_num=s
-         polls[k]=0
+try:
+    ent = pickle.load( open( "save.p", "rb" ) )
+except:
+    ent={}
 
+for k in range(0,27):
+    for j in range(0,5):
+        try:
+            entries[k,j]=ent[k,j]
+        except:
+            entries[k,j]=''
 
-# Initialize parties and coalitions (labelled by letters)
+print(entries)
 
-labels=['']*party_num
-colors=['']*party_num
+root = tk.Tk()
 
-for k in range(0, party_num):
-     party_names[k]=str(entries[k,0])
-     labels[k]=str(entries[k,1])
-     colors[k]=str(entries[k,2])
+tk.Label(root, text="Country").grid(row=0)
+tk.Label(root, text="Poll").grid(row=1)
+tk.Label(root, text="Party Name").grid(row=2, column=1)
+tk.Label(root, text="Party Label").grid(row=2, column=2)
+tk.Label(root, text="Party Color").grid(row=2, column=3)
+tk.Label(root, text="Seats Proportion").grid(row=2, column=4)
+tk.Label(root, text="Excluded Partners").grid(row=2, column=5)
+tk.Label(root, text="A").grid(row=3)
+tk.Label(root, text="B").grid(row=4)
+tk.Label(root, text="C").grid(row=5)
+tk.Label(root, text="D").grid(row=6)
+tk.Label(root, text="E").grid(row=7)
+tk.Label(root, text="F").grid(row=8)
+tk.Label(root, text="G").grid(row=9)
+tk.Label(root, text="H").grid(row=10)
+tk.Label(root, text="I").grid(row=11)
+tk.Label(root, text="J").grid(row=12)
+tk.Label(root, text="K").grid(row=13)
+tk.Label(root, text="L").grid(row=14)
+tk.Label(root, text="M").grid(row=15)
+tk.Label(root, text="N").grid(row=16)
+tk.Label(root, text="O").grid(row=17)
+tk.Label(root, text="P").grid(row=18)
+tk.Label(root, text="Q").grid(row=19)
+tk.Label(root, text="R").grid(row=20)
+tk.Label(root, text="S").grid(row=21)
+tk.Label(root, text="T").grid(row=22)
+tk.Label(root, text="U").grid(row=23)
+tk.Label(root, text="V").grid(row=24)
+tk.Label(root, text="W").grid(row=25)
+tk.Label(root, text="X").grid(row=26)
+tk.Label(root, text="Y").grid(row=27)
+tk.Label(root, text="Z").grid(row=28)
 
-parties = list(string.ascii_uppercase)[0:party_num]
+for j in range(0,5):
+         entry_var[0,j] = tk.StringVar(root, entries[0,j])
 
-label = dict(zip(parties,labels))  
-color = dict(zip(parties,colors))
-coalitions = powerset(parties)
+entry[0,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=0,column=1)
+entry[0,1] = tk.Entry(root, width=10, textvariable=entry_var[0,1]).grid(row=1,column=1)
 
-# Computing seats, Shapley values and all winning coalitions
-
-P=0
-for i in range(len(polls)):
-     P += polls[i]
-
-
-# Initialize proportions of seats (precise and rounded)    
-
-s ={}                                                    
-sround = {}    
-pl = {} 
-i = 0  
-for p in parties:
-     pl[p]=polls[i]
-     s[p] = polls[i]/P
-     sround[p]= round(float(s[p]*100),1)
-     i+=1
-
-
-# Introduce campaign commitments
-
-friends={}
-friends['A']='A', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'N'
-friends['B']='B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
-friends['C']='B', 'C', 'D', 'E', 'J', 'L', 'M', 'N'
-friends['D']='A','B', 'C', 'D', 'E', 'I', 'j', 'K', 'L', 'M', 'N'
-friends['E']='A','B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
-friends['F']='A','B', 'E', 'F', 'G', 'H', 'K', 'M', 'N'
-friends['G']='A','B', 'E', 'F', 'G', 'H', 'K', 'M', 'N'
-friends['H']='A','B', 'E', 'F', 'G', 'H', 'K', 'M', 'N'
-friends['I']='A','B', 'D', 'E', 'I', 'J', 'K', 'M', 'N'
-friends['J']='B', 'C', 'D', 'E', 'I', 'J', 'K', 'L', 'M', 'N'
-friends['K']='A','B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'N'
-friends['L']='B', 'C', 'D', 'E', 'J', 'L', 'M', 'N'
-friends['M']='B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
-friends['N']='A','B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
-
-worth = {}                                           # Assign worth to coalitions
-for i in tuple(coalitions):
-     sumsp=0
-     for r in tuple(i):
-         j=set(i).intersection(set(friends[r]))
-         if j==set(i):
-             sumsp = sumsp +  s[r]
-     worth[tuple(i)] = ( copysign(1,(sumsp - 0.5)) + 1)/2
-     if ( copysign(1,(sumsp - 0.5)) + 1)==1:
-         worth[tuple(i)] = 0
-letter_game = CooperativeGame(worth)
-sh = letter_game.shapley_value()
-print( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
-for k in parties:
-     lb = label[k]
-     num = sround[k]
-     v = max(sh[k],0)
-     print( "{:<10} {:<10} {:<10} {:<10} {:<10}".format(k, lb, round(float(pl[k]),2), num, v) )    
-
-letter_function = {}
-for k in worth.keys():            # Find all winning coalitions
-     if worth[k] != 0:
-         letter_function[k]=worth[k]
+for k in range(1,27):
+     for j in range(0,5):
+         entry_var[k,j] = tk.StringVar(root, entries[k,j])
+         entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
 
 
-# Find all minimal winning coalitions
 
-non_minimal_winning={}
-for k in letter_function.keys():
-     for j in letter_function.keys():
-         if (j!= k) and (set(k).intersection(set(j)) == set(k)):             
-             non_minimal_winning[j]=letter_function[j]
+entry[28] = tk.Button(root, text='Quit', command=root.quit).grid(row=30,column=0)
+entry[29] = tk.Button(root, text='Load', command=lambda:autoload()).grid(row=30,column=1)
+entry[30] = tk.Button(root, text='Save', command=root.quit).grid(row=30,column=2)
 
-minimal_winning={}
-for k in letter_function.keys():
-    if not(k in non_minimal_winning.keys()):
-         minimal_winning[k]=letter_function[k]
+root.mainloop()
 
-# Find all stable coalitions
+for k in range(0,27):
+    for j in range(0,5):
+        entries[k,j]=entry_var[k,j].get()
 
-plt.figure(0)                
-chi = {}
-power = {}
-maxchi = 0
-for k in minimal_winning.keys():
-     S = 0
-     for j in k:
-         S += max(sh[j],0)
-     chi[k] = minimal_winning[k]/S
-     if chi[k] > maxchi:
-         maxchi = chi[k]
-     u=''
-     b = 0
-     for j in k:
-         po=''
-         pc=''
-         power[j] = max(0,sh[j])*chi[k]
-         if power[j]==0:
-             po='('
-             pc=')'
-         u = u + po + label[j].split('/')[0] + pc + ' '  
-     for i in k:
-         plt.bar(u, power[i], bottom = b, color = color[i])
-         b = b +power[i]
-     plt.bar(u, 0.03, bottom=chi[k]/maxchi*(0.9), color='white', width=.2) 
-plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
-plt.show()
+pickle.dump(entries, open("save.p", "wb"))
 
-print('Minimal winning coalitions and Power distribution') 
-print('( Power = Strength x Stability ):')            
-
-S = 0
-for j in parties:
-     S += max(sh[j],0)
-
-plt.figure(1)                
-for i in parties:
-     plt.bar(label[i], pl[i], color = color[i], width=0.3, align='center')
-     plt.bar(label[i], 0.003, bottom = max(0,sh[i])/S, color = 'red', width=0.6, align='center')         
-plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
-plt.show()
