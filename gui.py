@@ -1,28 +1,33 @@
 #!/usr/bin/env python3
 import tkinter as tk
-from tkinter import ttk
+from tkinter import filedialog
+from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import asksaveasfilename
+from tkinter import *
 import pickle
 
-FILENAME="save.pickle"
 entries={}
 entry={}
 entry_var={}
+errmsg = 'Error!'
 
-try:
-    ent = pickle.load( open( "save.p", "rb" ) )
-except:
-    ent={}
+def load_file():
+    try:
+        ent = pickle.load( open( FILENAME, "rb" ) )
+    except:
+        ent={}
 
-for k in range(0,27):
-    for j in range(0,5):
-        try:
-            entries[k,j]=ent[k,j]
-        except:
-            entries[k,j]=''
-
-print(entries)
+    for k in range(0,27):
+        for j in range(0,5):
+            try:
+                entries[k,j]=ent[k,j]
+            except:
+                entries[k,j]=''
 
 root = tk.Tk()
+
+FILENAME=askopenfilename()
+load_file()
 
 tk.Label(root, text="Country").grid(row=0)
 tk.Label(root, text="Poll").grid(row=1)
@@ -69,17 +74,16 @@ for k in range(1,27):
          entry_var[k,j] = tk.StringVar(root, entries[k,j])
          entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
 
-
-
 entry[28] = tk.Button(root, text='Quit', command=root.quit).grid(row=30,column=0)
-entry[29] = tk.Button(root, text='Load', command=lambda:autoload()).grid(row=30,column=1)
+entry[29] = tk.Button(root, text='Load', command=root.quit).grid(row=30,column=1)
 entry[30] = tk.Button(root, text='Save', command=root.quit).grid(row=30,column=2)
 
 root.mainloop()
+
+FILENAME = asksaveasfilename()
 
 for k in range(0,27):
     for j in range(0,5):
         entries[k,j]=entry_var[k,j].get()
 
-pickle.dump(entries, open("save.p", "wb"))
-
+pickle.dump(entries, open(FILENAME, "wb"))
