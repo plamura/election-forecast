@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 import tkinter as tk
+from tkinter import ttk
 import pickle
 
+FILENAME="save.pickle"
 entries={}
-
 entry={}
 entry_var={}
+
+try:
+    ent = pickle.load( open( "save.p", "rb" ) )
+except:
+    ent={}
+
+for k in range(0,27):
+    for j in range(0,5):
+        try:
+            entries[k,j]=ent[k,j]
+        except:
+            entries[k,j]=''
+
+print(entries)
+
 root = tk.Tk()
 
 tk.Label(root, text="Country").grid(row=0)
@@ -43,39 +59,27 @@ tk.Label(root, text="Y").grid(row=27)
 tk.Label(root, text="Z").grid(row=28)
 
 for j in range(0,5):
-         entry_var[0,j] = tk.StringVar()
+         entry_var[0,j] = tk.StringVar(root, entries[0,j])
 
 entry[0,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=0,column=1)
 entry[0,1] = tk.Entry(root, width=10, textvariable=entry_var[0,1]).grid(row=1,column=1)
 
-for k in range(0,27):
+for k in range(1,27):
      for j in range(0,5):
-         entry_var[k,j] = tk.StringVar()
-         entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+3,column=j+1)
+         entry_var[k,j] = tk.StringVar(root, entries[k,j])
+         entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
 
 
 
 entry[28] = tk.Button(root, text='Quit', command=root.quit).grid(row=30,column=0)
-entry[29] = tk.Button(root, text='Load', command=root.quit).grid(row=30,column=1)
+entry[29] = tk.Button(root, text='Load', command=lambda:autoload()).grid(row=30,column=1)
 entry[30] = tk.Button(root, text='Save', command=root.quit).grid(row=30,column=2)
-
-def autoupdate(*args):
-     with open('test.txt', 'w') as f:
-         for k in range(0,27):
-             for j in range(0,5):
-                 f.write(entry_var[k,j].get()+ '\n')
-                 entries[k,j]=entry_var[k,j].get()
-
-for k in range(0,27):
-     for j in range(0,5):
-         entry_var[k,j].trace('w', autoupdate)
-
 
 root.mainloop()
 
-polls={}
-entry_types=('country','poll','party_names','party_labels','seats_proportion','exclusions')
-country=entry_var[0,0].get()
-poll=entry_var[0,1].get()
+for k in range(0,27):
+    for j in range(0,5):
+        entries[k,j]=entry_var[k,j].get()
 
 pickle.dump(entries, open("save.p", "wb"))
+
