@@ -5,6 +5,8 @@ from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 from tkinter import *
 import pickle
+import goldenapp3
+from goldenapp3 import goldenapp
 
 entries={}
 entry={}
@@ -12,22 +14,45 @@ entry_var={}
 errmsg = 'Error!'
 
 def load_file():
-    try:
+     FILENAME=askopenfilename()
+     try:
         ent = pickle.load( open( FILENAME, "rb" ) )
-    except:
+     except:
         ent={}
 
-    for k in range(0,27):
-        for j in range(0,5):
-            try:
-                entries[k,j]=ent[k,j]
-            except:
-                entries[k,j]=''
+     for k in range(0,27):
+         for j in range(0,5):
+             try:
+                 entries[k,j]=ent[k,j]
+             except:
+                 entries[k,j]=''
+
+def save_file():
+     FILENAME = asksaveasfilename()
+
+     for k in range(0,27):
+         for j in range(0,5):
+             entries[k,j]=entry_var[k,j].get()
+
+     pickle.dump(entries, open(FILENAME, "wb"))
+
+     pickle.dump(entries, open('save.p', "wb"))
+
+def populate():
+     load_file()
+     for j in range(0,5):
+         entry_var[0,j] = tk.StringVar(root, entries[0,j])
+
+     entry[0,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=0,column=1)
+     entry[1,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=1,column=1)
+
+     for k in range(1,27):
+         for j in range(0,5):
+             entry_var[k,j] = tk.StringVar(root, entries[k,j])
+             entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
+
 
 root = tk.Tk()
-
-FILENAME=askopenfilename()
-load_file()
 
 tk.Label(root, text="Country").grid(row=0)
 tk.Label(root, text="Poll").grid(row=1)
@@ -63,27 +88,11 @@ tk.Label(root, text="X").grid(row=26)
 tk.Label(root, text="Y").grid(row=27)
 tk.Label(root, text="Z").grid(row=28)
 
-for j in range(0,5):
-         entry_var[0,j] = tk.StringVar(root, entries[0,j])
+populate()
 
-entry[0,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=0,column=1)
-entry[0,1] = tk.Entry(root, width=10, textvariable=entry_var[0,1]).grid(row=1,column=1)
-
-for k in range(1,27):
-     for j in range(0,5):
-         entry_var[k,j] = tk.StringVar(root, entries[k,j])
-         entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
-
-entry[28] = tk.Button(root, text='Quit', command=root.quit).grid(row=30,column=0)
-entry[29] = tk.Button(root, text='Load', command=root.quit).grid(row=30,column=1)
-entry[30] = tk.Button(root, text='Save', command=root.quit).grid(row=30,column=2)
+entry[28] = tk.Button(root, text='Load', command= lambda:populate()).grid(row=30,column=0)
+entry[29] = tk.Button(root, text='Save', command= lambda:save_file()).grid(row=30,column=1)
+entry[30] = tk.Button(root, text='Run', command= lambda:goldenapp()).grid(row=30,column=2)
+entry[31] = tk.Button(root, text='Quit', command= root.quit).grid(row=30,column=3)
 
 root.mainloop()
-
-FILENAME = asksaveasfilename()
-
-for k in range(0,27):
-    for j in range(0,5):
-        entries[k,j]=entry_var[k,j].get()
-
-pickle.dump(entries, open(FILENAME, "wb"))
