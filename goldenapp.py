@@ -1,12 +1,14 @@
 
 #!/usr/bin/env python3
+import tkinter as tk
+from tkinter import filedialog
+from tkinter.filedialog import askopenfilename
 import math
 from math import *
 import matplotlib.pyplot as plt
 from cooperative_game import * 
 import pickle
 import string
-
 
 def powerset(s):
      x = len(s)
@@ -16,10 +18,15 @@ def powerset(s):
 
 
 entries={}
-entries = pickle.load( open( "save.p", "rb" ) )
-
 party_names={}
 polls={}
+
+root = tk.Tk()
+
+FILENAME=askopenfilename()
+entries = pickle.load( open( FILENAME, "rb" ) )
+root.destroy()
+
 s=0
 party_num=0
 for k in range(0, 15):
@@ -59,8 +66,6 @@ for k in range(0,party_num):
 
 for k in range(0,party_num):
     friends[parties[k]]=fr[k]
-
-print(friends)
 
 # Computing seats, Shapley values and all winning coalitions
 
@@ -118,6 +123,7 @@ minimal_winning={}
 for k in letter_function.keys():
     if not(k in non_minimal_winning.keys()):
          minimal_winning[k]=letter_function[k]
+
 
 # Find all stable coalitions
 
