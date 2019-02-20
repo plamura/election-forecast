@@ -1,6 +1,5 @@
 
 #!/usr/bin/env python3
-import tkinter as tk
 import math
 from math import *
 import matplotlib.pyplot as plt
