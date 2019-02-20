@@ -5,8 +5,8 @@ from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 from tkinter import *
 import pickle
-import goldenapp3
-from goldenapp3 import goldenapp
+from goldenapp3 import *
+
 
 entries={}
 entry={}
@@ -52,7 +52,12 @@ def populate():
              entry[k,j] = tk.Entry(root, width=10, textvariable=entry_var[k,j]).grid(row=k+2,column=j+1)
 
 
-root = tk.Tk()
+
+# set the WM_CLASS
+root = Tk(className="GoldenApp")
+# set the window title
+root.wm_title("GoldenApp Political Analytics Tool")
+
 
 tk.Label(root, text="Country").grid(row=0)
 tk.Label(root, text="Poll").grid(row=1)
@@ -96,3 +101,5 @@ entry[30] = tk.Button(root, text='Run', command= lambda:goldenapp()).grid(row=30
 entry[31] = tk.Button(root, text='Quit', command= root.quit).grid(row=30,column=3)
 
 root.mainloop()
+
+
