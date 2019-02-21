@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[en_US]=/home/piero/GoldenApp/goldenapple.png
+Name[en_US]=Goldenapp
+Exec=python3 /home/piero/GoldenApp/gui.py
+Name=Goldenapp
+Icon=/home/piero/GoldenApp/goldenapple.png
+StartupWMClass=Goldenapp
