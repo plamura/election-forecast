@@ -44,7 +44,7 @@ def populate():
          entry_var[0,j] = tk.StringVar(root, entries[0,j])
 
      entry[0,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=0,column=1)
-     entry[1,0] = tk.Entry(root, width=10, textvariable=entry_var[0,0]).grid(row=1,column=1)
+     entry[1,0] = tk.Entry(root, width=10, textvariable=entry_var[0,1]).grid(row=1,column=1)
 
      for k in range(1,27):
          for j in range(0,5):
@@ -54,7 +54,7 @@ def populate():
 
 
 # set the WM_CLASS
-root = Tk(className="GoldenApp")
+root = Tk(className="Goldenapp")
 # set the window title
 root.wm_title("GoldenApp Political Analytics Tool")
 
