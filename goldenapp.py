@@ -86,7 +86,7 @@ for p in parties:
      sround[p]= round(float(s[p]*100),1)
      i+=1
 
-worth = {}                                           # Assign worth to coalitions
+worth = {}   
 for i in tuple(coalitions):
      sumsp=0
      for r in tuple(i):
@@ -96,6 +96,18 @@ for i in tuple(coalitions):
      worth[tuple(i)] = ( copysign(1,(sumsp - 0.5)) + 1)/2
      if ( copysign(1,(sumsp - 0.5)) + 1)==1:
          worth[tuple(i)] = 0
+
+
+print(worth)
+wirth = {}
+print(tuple(powerset(i)))
+for i in tuple(coalitions):
+     wirth[tuple(i)]=0
+     for r in tuple(powerset(i)):
+         if worth[tuple(r)]==1:
+             wirth[tuple(i)]=1
+print(wirth)
+
 letter_game = CooperativeGame(worth)
 sh = letter_game.shapley_value()
 print( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
@@ -168,3 +180,4 @@ for i in parties:
      plt.bar(label[i], 0.003, bottom = max(0,sh[i])/S, color = 'red', width=0.6, align='center')         
 plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
 plt.show()
+
