@@ -89,6 +89,10 @@ def goldenapp():
          worth[tuple(i)] = ( copysign(1,(sumsp - 0.5)) + 1)/2
          if ( copysign(1,(sumsp - 0.5)) + 1)==1:
              worth[tuple(i)] = 0
+         for j in tuple(powerset(i)):                       # Make game monotonic
+             worth[tuple(i)]=max(worth[tuple(i)], worth[tuple(j)])
+
+
      letter_game = CooperativeGame(worth)
      sh = letter_game.shapley_value()
      print( "{:<10} {:<10} {:<10} {:<10} {:<10}".format('Label', 'Party', 'Votes (%)', 'Seats (%)', 'Strength') )
