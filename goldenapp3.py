@@ -1,8 +1,8 @@
-
 #!/usr/bin/env python3
 import math
 from math import *
 import matplotlib.pyplot as plt
+import networkx as nx
 from cooperative_game import * 
 import pickle
 import string
@@ -127,14 +127,12 @@ def goldenapp():
      plt.figure(0)                
      chi = {}
      power = {}
-     maxchi = 0
      for k in minimal_winning.keys():
          S = 0
          for j in k:
              S += max(sh[j],0)
          chi[k] = minimal_winning[k]/S
-         if chi[k] > maxchi:
-             maxchi = chi[k]
+
          u=''
          b = 0
          for j in k:
@@ -148,7 +146,7 @@ def goldenapp():
          for i in k:
              plt.bar(u, power[i], bottom = b, color = color[i])
              b = b +power[i]
-         plt.bar(u, 0.03, bottom=chi[k]/maxchi*(0.9), color='white', width=.2) 
+         plt.bar(u, 0.03, bottom=(chi[k]-1)*(0.9), color='white', width=.2) 
      plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
 
      print('Minimal winning coalitions and Power distribution') 
@@ -163,4 +161,26 @@ def goldenapp():
          plt.bar(label[i], s[i], color = color[i], width=0.3, align='center')
          plt.bar(label[i], 0.003, bottom = max(0,sh[i])/S, color = 'red', width=0.6, align='center')         
      plt.xticks(rotation=-20, fontsize=8, horizontalalignment='left')
+     
+     plt.figure(2)
+     G = nx.Graph()
+     G.add_nodes_from(parties)
+     for i in tuple(parties):
+         for j in tuple(parties):
+             if set(i).intersection(friends[j])!=set():
+                 G.add_edge(i,j)
+     pos = nx.spring_layout(G)  # positions for all nodes
+     # nodes 
+     deg=dict(nx.degree(G))
+
+     nx.draw_networkx_nodes(G, pos, nodelist=parties, node_color=colors, edgecolors='black', alpha=0.5, node_size=[v * 10000 for v in s.values()])
+     nx.draw_networkx_nodes(G, pos, nodelist=parties, node_color=colors, edgecolors='red', alpha=0.5, node_size=[v * 10000 for v in sh.values()])
+
+     # edges
+     nx.draw_networkx_edges(G, pos, width=1)
+     # labels
+     nx.draw_networkx_labels(G, pos, labels=label, font_size=10, font_family='sans-serif')
+
+     plt.axis('off')
      plt.show()
+     print(chi)
