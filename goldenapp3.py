@@ -177,7 +177,7 @@ def goldenapp():
      nx.draw_networkx_nodes(G, pos, nodelist=parties, node_color=colors, edgecolors='red', alpha=0.5, node_size=[v * 10000 for v in sh.values()])
 
      # edges
-     nx.draw_networkx_edges(G, pos, width=1)
+     nx.draw_networkx_edges(G, pos, alpha=0.2, width=1.5)
      # labels
      nx.draw_networkx_labels(G, pos, labels=label, font_size=10, font_family='sans-serif')
 
